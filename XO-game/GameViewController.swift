@@ -35,6 +35,7 @@ class GameViewController: UIViewController {
         gameboardView.onSelectPosition = { [weak self] position in
             guard let self = self else { return }
             
+            
             self.currentState.addSign(at: position)
             
             self.counter += 1
@@ -55,11 +56,13 @@ class GameViewController: UIViewController {
     
     func nextPlayerTurn() {
         if let winner = referee.determineWinner() {
+            Logger.shared.log(action: .gameFinish(winner: winner))
             currentState = GameEndState(winnerPlayer: winner, gameViewController: self)
             return
         }
         
         if counter >= 9 {
+            Logger.shared.log(action: .gameFinish(winner: nil))
             currentState = GameEndState(winnerPlayer: nil, gameViewController: self)
         }
         
@@ -73,6 +76,8 @@ class GameViewController: UIViewController {
     
     
     @IBAction func restartButtonTapped(_ sender: UIButton) {
+        Logger.shared.log(action: .restartGame)
+        
         gameboardView.clear()
         gameBoard.clear()
         counter = 0
