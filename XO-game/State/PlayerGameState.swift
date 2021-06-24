@@ -16,29 +16,33 @@ class PlayerGameState: GameState {
     weak var gameBoard: Gameboard?
     weak var gameBoardView: GameboardView?
     
+    let markViewPrototype: MarkView
+    
     init(player: Player, gameViewController: GameViewController,
-         gameBoard: Gameboard, gameBoardView: GameboardView) {
+         gameBoard: Gameboard, gameBoardView: GameboardView,
+         markViewPrototype: MarkView) {
         self.player = player
         self.gameViewController = gameViewController
         self.gameBoard = gameBoard
         self.gameBoardView = gameBoardView
+        self.markViewPrototype = markViewPrototype
     }
     
     
     func addSign(at position: GameboardPosition) {
         guard let gameBoardView = gameBoardView, gameBoardView.canPlaceMarkView(at: position) else { return }
         
-        let markView: MarkView
+//        let markView: MarkView
         
-        switch player {
-        case .first:
-            markView = XView()
-        case .second:
-            markView = OView()
-        }
+//        switch player {
+//        case .first:
+//            markView = XView()
+//        case .second:
+//            markView = OView()
+//        }
         
         gameBoard?.setPlayer(player, at: position)
-        gameBoardView.placeMarkView(markView, at: position)
+        gameBoardView.placeMarkView(markViewPrototype.copy(), at: position)
         isMoveCompleted = true //ход завершен
     }
     

@@ -49,7 +49,8 @@ class GameViewController: UIViewController {
     func firstPlayerTurn() {
         let firstPlayer: Player = .first
         currentState = PlayerGameState(player: firstPlayer, gameViewController: self,
-                                       gameBoard: gameBoard, gameBoardView: gameboardView)
+                                       gameBoard: gameBoard, gameBoardView: gameboardView,
+                                       markViewPrototype: firstPlayer.markViewPrototype)
     }
     
     func nextPlayerTurn() {
@@ -65,7 +66,8 @@ class GameViewController: UIViewController {
         if let playerState = currentState as? PlayerGameState {
             let nextPlayer = playerState.player.next
             currentState = PlayerGameState(player: nextPlayer, gameViewController: self,
-                                           gameBoard: gameBoard, gameBoardView: gameboardView)
+                                           gameBoard: gameBoard, gameBoardView: gameboardView,
+                                           markViewPrototype: nextPlayer.markViewPrototype)
         }
     }
     
