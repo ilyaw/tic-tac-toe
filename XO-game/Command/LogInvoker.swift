@@ -12,7 +12,7 @@ class LogInvoker {
     public static let shared = LogInvoker()
     
     private let receiver = LogReceiver()
-    private let bufferSize = 6
+    private let bufferSize = 100
     private var commands: [LogCommand] = []
     
     private init() {}

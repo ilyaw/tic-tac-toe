@@ -35,13 +35,13 @@ class GameEndState: GameState {
     }
     
     private func setPlayerName(player: Player) -> String {
+        let mode = gameViewController?.versusMode
+        
         switch player {
         case .first:
             return "First"
         case .second:
-            return "Second"
+            return mode == .humanVsHuman ? "Second" : "Computer"
         }
     }
-    
-    
 }

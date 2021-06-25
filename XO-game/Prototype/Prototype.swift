@@ -17,6 +17,3 @@ extension Copying {
         return type(of: self).init(self)
     }
 }
-
-
-
