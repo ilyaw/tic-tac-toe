@@ -17,7 +17,7 @@ class GameViewController: UIViewController {
     @IBOutlet var restartButton: UIButton!
     
     private var counter: Int = 0
-    private(set) var versusMode: Versus = .humanVsComputer //
+    private(set) var versusMode: Versus = .humanVsHuman
     
     private let gameBoard = Gameboard()
     private lazy var referee = Referee(gameboard: gameBoard)
