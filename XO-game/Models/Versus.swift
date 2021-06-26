@@ -11,4 +11,5 @@ import Foundation
 enum Versus: Int {
     case humanVsHuman
     case humanVsComputer
+    case fiveByFive
 }

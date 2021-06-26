@@ -22,6 +22,7 @@ class GameViewController: UIViewController {
     private let gameBoard = Gameboard()
     private lazy var referee = Referee(gameboard: gameBoard)
     
+    private var invoker = FiveByFiveInvoker()
         
     private var currentState: GameState! {
         didSet {
@@ -40,10 +41,8 @@ class GameViewController: UIViewController {
             self.currentState.addSign(at: position)
         
             if self.currentState.isMoveCompleted {
-         
-                self.nextPlayerTurn()
+                self.versusMode == .fiveByFive ? self.fiveByFiveState() : self.nextPlayerTurn()
             }
-//            self.gameboardView.placeMarkView(XView(), at: position)
         }
     }
     
@@ -59,57 +58,106 @@ class GameViewController: UIViewController {
             currentState = ComputerGameState(player: firstPlayer, gameViewController: self,
                                            gameBoard: gameBoard, gameBoardView: gameboardView,
                                            markViewPrototype: firstPlayer.markViewPrototype)
+        case .fiveByFive:
+            currentState = FiveByFiveState(player: firstPlayer, gameViewController: self,
+                                           gameBoard: gameBoard, gameBoardView: gameboardView,
+                                           markViewPrototype: firstPlayer.markViewPrototype,
+                                           invoker: invoker)
         }
     }
     
     func nextPlayerTurn() {
         self.counter += 1
         
-        if let winner = referee.determineWinner() {
-            Logger.shared.log(action: .gameFinish(winner: winner))
-            currentState = GameEndState(winnerPlayer: winner, gameViewController: self)
+        let win = referee.determineWinner()
+        
+        if win != nil || counter >= 9 {
+            currentState = GameEndState(winnerPlayer: win, gameViewController: self)
             return
         }
+    
+        switch versusMode {
+        case .humanVsHuman:
+            playGameState()
+        case .humanVsComputer:
+            computerGameState()
+        case .fiveByFive:
+            break
+        }
+    }
+    
+    
+    private func fiveByFiveState() {
         
-        if counter >= 9 {
-            Logger.shared.log(action: .gameFinish(winner: nil))
-            currentState = GameEndState(winnerPlayer: nil, gameViewController: self)
+        let nextPlayer = counter < 4 ? Player.first : Player.second
+        
+        if counter == 4 {
+            allGameBoardClear()
         }
         
+        currentState = FiveByFiveState(player: nextPlayer, gameViewController: self,
+                                       gameBoard: gameBoard, gameBoardView: gameboardView,
+                                       markViewPrototype: nextPlayer.markViewPrototype,
+                                       invoker: invoker)
+        self.counter += 1
+        
+        if counter >= 10 {
+            
+            allGameBoardClear()
+            
+            self.view.isUserInteractionEnabled = false
+            
+            let dispatchGroup = DispatchGroup()
+            DispatchQueue.global().async(group: dispatchGroup) {
+                self.invoker.work()
+            }
+            
+            dispatchGroup.notify(queue: DispatchQueue.main) {
+                let winner = self.referee.determineWinner()
+                self.currentState = GameEndState(winnerPlayer: winner, gameViewController: self)
+                self.view.isUserInteractionEnabled = true
+            }
+        }
+    }
+    
+    private func playGameState() {
         if let playerState = currentState as? PlayerGameState {
             let nextPlayer = playerState.player.next
             currentState = PlayerGameState(player: nextPlayer, gameViewController: self,
                                            gameBoard: gameBoard, gameBoardView: gameboardView,
                                            markViewPrototype: nextPlayer.markViewPrototype)
         }
-        
+    }
+    
+    private func computerGameState() {
         if let playerState = currentState as? ComputerGameState {
             let nextPlayer = playerState.player.next
             currentState = ComputerGameState(player: nextPlayer, gameViewController: self,
-                                           gameBoard: gameBoard, gameBoardView: gameboardView,
-                                           markViewPrototype: nextPlayer.markViewPrototype)
+                                             gameBoard: gameBoard, gameBoardView: gameboardView,
+                                             markViewPrototype: nextPlayer.markViewPrototype)
             if nextPlayer == .second {
                 nextPlayerTurn()
             }
         }
-        
-     
-      
     }
     
     
+    
+    
     @IBAction func restartButtonTapped(_ sender: UIButton) {
-        Logger.shared.log(action: .restartGame)
-        
         restartGame()
     }
     
     private func restartGame() {
-        gameboardView.clear()
-        gameBoard.clear()
+        allGameBoardClear()
         counter = 0
         
         firstPlayerTurn()
+    }
+    
+    private func allGameBoardClear() {
+        gameboardView.clear()
+        gameBoard.clear()
     }
     
     @IBAction func openSettingsTapped(_ sender: UIButton) {
@@ -123,8 +171,7 @@ class GameViewController: UIViewController {
             }
         }
     }
-    
-    
+
 }
 
 extension GameViewController: SettingsDelegate {

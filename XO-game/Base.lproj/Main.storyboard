@@ -122,10 +122,11 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="6Kd-0f-VFc">
-                                        <rect key="frame" x="0.0" y="39" width="219" height="32"/>
+                                        <rect key="frame" x="0.0" y="39" width="329" height="32"/>
                                         <segments>
                                             <segment title="Пользователя"/>
                                             <segment title="Компьютера"/>
+                                            <segment title="Кастом 5x5"/>
                                         </segments>
                                     </segmentedControl>
                                 </subviews>
