@@ -21,6 +21,7 @@ class GameViewController: UIViewController {
     
     private let gameBoard = Gameboard()
     private lazy var referee = Referee(gameboard: gameBoard)
+    private var factory: StateFactory?
     
     private var invoker = FiveByFiveInvoker()
         
@@ -33,6 +34,10 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupController()
+    }
+    
+    private func setupController() {
         firstPlayerTurn()
         
         gameboardView.onSelectPosition = { [weak self] position in
@@ -46,59 +51,38 @@ class GameViewController: UIViewController {
         }
     }
     
+    
+    
     func firstPlayerTurn() {
-        let firstPlayer: Player = .first
-        
-        switch versusMode {
-        case .humanVsHuman:
-            currentState = PlayerGameState(player: firstPlayer, gameViewController: self,
-                                           gameBoard: gameBoard, gameBoardView: gameboardView,
-                                           markViewPrototype: firstPlayer.markViewPrototype)
-        case .humanVsComputer:
-            currentState = ComputerGameState(player: firstPlayer, gameViewController: self,
-                                           gameBoard: gameBoard, gameBoardView: gameboardView,
-                                           markViewPrototype: firstPlayer.markViewPrototype)
-        case .fiveByFive:
-            currentState = FiveByFiveState(player: firstPlayer, gameViewController: self,
-                                           gameBoard: gameBoard, gameBoardView: gameboardView,
-                                           markViewPrototype: firstPlayer.markViewPrototype,
-                                           invoker: invoker)
-        }
+        factory = StateFactory(gameViewController: self, gameBoard: gameBoard,
+                               gameBoardView: gameboardView, invoker: invoker,
+                               versusMode: versusMode)
+                
+        currentState = factory?.create(currentState: currentState)
     }
     
     func nextPlayerTurn() {
         self.counter += 1
         
-        let win = referee.determineWinner()
+        let winner = referee.determineWinner()
         
-        if win != nil || counter >= 9 {
-            currentState = GameEndState(winnerPlayer: win, gameViewController: self)
+        if winner != nil || counter >= 9 {
+            currentState = factory?.gameOverCreate(winner: winner)
             return
         }
-    
-        switch versusMode {
-        case .humanVsHuman:
-            playGameState()
-        case .humanVsComputer:
-            computerGameState()
-        case .fiveByFive:
-            break
-        }
+        
+        versusMode == .humanVsHuman ? playGameState() : computerGameState()
     }
     
     
     private func fiveByFiveState() {
         
-        let nextPlayer = counter < 4 ? Player.first : Player.second
-        
         if counter == 4 {
             allGameBoardClear()
         }
         
-        currentState = FiveByFiveState(player: nextPlayer, gameViewController: self,
-                                       gameBoard: gameBoard, gameBoardView: gameboardView,
-                                       markViewPrototype: nextPlayer.markViewPrototype,
-                                       invoker: invoker)
+        currentState = factory?.create(currentState: currentState)
+        
         self.counter += 1
         
         if counter >= 10 {
@@ -114,27 +98,22 @@ class GameViewController: UIViewController {
             
             dispatchGroup.notify(queue: DispatchQueue.main) {
                 let winner = self.referee.determineWinner()
-                self.currentState = GameEndState(winnerPlayer: winner, gameViewController: self)
+                self.currentState = self.factory?.gameOverCreate(winner: winner)
                 self.view.isUserInteractionEnabled = true
             }
         }
     }
     
     private func playGameState() {
-        if let playerState = currentState as? PlayerGameState {
-            let nextPlayer = playerState.player.next
-            currentState = PlayerGameState(player: nextPlayer, gameViewController: self,
-                                           gameBoard: gameBoard, gameBoardView: gameboardView,
-                                           markViewPrototype: nextPlayer.markViewPrototype)
-        }
+        currentState = factory?.create(currentState: currentState)
     }
     
     private func computerGameState() {
         if let playerState = currentState as? ComputerGameState {
             let nextPlayer = playerState.player.next
-            currentState = ComputerGameState(player: nextPlayer, gameViewController: self,
-                                             gameBoard: gameBoard, gameBoardView: gameboardView,
-                                             markViewPrototype: nextPlayer.markViewPrototype)
+            
+            currentState = factory?.create(currentState: currentState)
+            
             if nextPlayer == .second {
                 nextPlayerTurn()
             }
@@ -167,6 +146,7 @@ class GameViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "ToOpenSettings" {
             if let destionation = segue.destination as? SettingsViewController {
+                destionation.versusMode = versusMode
                 destionation.delegate = self
             }
         }

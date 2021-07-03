@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		09386A822690926900C7EDC2 /* StateFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09386A812690926900C7EDC2 /* StateFactory.swift */; };
 		093D991A268479DE00473817 /* GameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093D9919268479DE00473817 /* GameState.swift */; };
 		093D991C26847A6900473817 /* PlayerGameState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093D991B26847A6900473817 /* PlayerGameState.swift */; };
 		093D991E26847D7600473817 /* GameEndState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093D991D26847D7600473817 /* GameEndState.swift */; };
@@ -39,6 +40,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		09386A812690926900C7EDC2 /* StateFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateFactory.swift; sourceTree = "<group>"; };
 		093D9919268479DE00473817 /* GameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameState.swift; sourceTree = "<group>"; };
 		093D991B26847A6900473817 /* PlayerGameState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerGameState.swift; sourceTree = "<group>"; };
 		093D991D26847D7600473817 /* GameEndState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameEndState.swift; sourceTree = "<group>"; };
@@ -83,6 +85,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		09386A8026908F5100C7EDC2 /* AbstractFactory */ = {
+			isa = PBXGroup;
+			children = (
+				09386A812690926900C7EDC2 /* StateFactory.swift */,
+			);
+			path = AbstractFactory;
+			sourceTree = "<group>";
+		};
 		093D9918268479BB00473817 /* State */ = {
 			isa = PBXGroup;
 			children = (
@@ -143,6 +153,7 @@
 		F874E46F2224621100364CAE /* XO-game */ = {
 			isa = PBXGroup;
 			children = (
+				09386A8026908F5100C7EDC2 /* AbstractFactory */,
 				093D99332686255800473817 /* FiveByFiveCommand */,
 				093D99242684E8B600473817 /* LogCommand */,
 				093D99212684B43300473817 /* Prototype */,
@@ -263,6 +274,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				09386A822690926900C7EDC2 /* StateFactory.swift in Sources */,
 				093D99232684B44100473817 /* Prototype.swift in Sources */,
 				F874E4732224621100364CAE /* GameViewController.swift in Sources */,
 				F874E4DD2225C25D00364CAE /* GameboardPosition.swift in Sources */,

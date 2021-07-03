@@ -17,16 +17,17 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var versusSegmentControl: UISegmentedControl!
     
     weak var delegate: SettingsDelegate?
+    var versusMode: Versus = .humanVsHuman
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        versusSegmentControl.selectedSegmentIndex = versusMode.rawValue
     }
     
     @IBAction func didTapSaveButton(_ sender: UIButton) {
-        let mode = Versus(rawValue: versusSegmentControl.selectedSegmentIndex) ?? .humanVsHuman
-        delegate?.data(versusMode: mode)
+        versusMode = Versus(rawValue: versusSegmentControl.selectedSegmentIndex) ?? .humanVsHuman
+        delegate?.data(versusMode: versusMode)
         
         dismiss(animated: true, completion: nil)
     }
