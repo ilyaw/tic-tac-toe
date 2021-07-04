@@ -1,38 +1,45 @@
 //
-//  PlayerGameState.swift
+//  FiveByFiveState.swift
 //  XO-game
 //
-//  Created by Ilya on 24.06.2021.
+//  Created by Ilya on 25.06.2021.
 //  Copyright © 2021 plasmon. All rights reserved.
 //
 
 import Foundation
 
-class PlayerGameState: GameState {
+class FiveByFiveState: GameState {
     var isMoveCompleted: Bool = false
     
     public let player: Player
-    weak var gameViewController: GameViewController?
-    weak var gameBoard: Gameboard?
-    weak var gameBoardView: GameboardView?
+    var gameViewController: GameViewController?
+    var gameBoard: Gameboard
+    var gameBoardView: GameboardView
+    var invoker: FiveByFiveInvoker
     
     let markViewPrototype: MarkView
     
     init(player: Player, gameViewController: GameViewController,
          gameBoard: Gameboard, gameBoardView: GameboardView,
-         markViewPrototype: MarkView) {
+         markViewPrototype: MarkView, invoker: FiveByFiveInvoker) {
         self.player = player
         self.gameViewController = gameViewController
         self.gameBoard = gameBoard
         self.gameBoardView = gameBoardView
         self.markViewPrototype = markViewPrototype
+        self.invoker = invoker
     }
     
     
     func addSign(at position: GameboardPosition) {
-        guard let gameBoardView = gameBoardView, gameBoardView.canPlaceMarkView(at: position) else { return }
+        guard gameBoardView.canPlaceMarkView(at: position) else { return }
         
-        gameBoard?.setPlayer(player, at: position)
+        invoker.addCommand(command: FiveByFiveCommand(player: player,
+                                                       position: position,
+                                                       gameBoard: gameBoard,
+                                                       gameBoardView: gameBoardView))
+        
+        gameBoard.setPlayer(player, at: position)
         gameBoardView.placeMarkView(markViewPrototype.copy(), at: position)
         isMoveCompleted = true //ход завершен
     }
@@ -49,6 +56,5 @@ class PlayerGameState: GameState {
         
         gameViewController?.winnerLabel.isHidden = true
     }
-    
     
 }

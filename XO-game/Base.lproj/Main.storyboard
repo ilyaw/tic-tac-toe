@@ -5,6 +5,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -60,16 +61,27 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6b2-jN-eik">
+                                <rect key="frame" x="10" y="607" width="130.5" height="50"/>
+                                <state key="normal" title="Настройки" image="gearshape" catalog="system"/>
+                                <connections>
+                                    <action selector="openSettingsTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="320-5g-4Ik"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="6b2-jN-eik" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="10" id="3Xf-se-0ra"/>
                             <constraint firstItem="FlK-xv-cci" firstAttribute="top" secondItem="LYG-3D-cJV" secondAttribute="bottom" constant="22" id="7Cg-Od-ODs"/>
                             <constraint firstItem="5M8-Sh-pRf" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="AYe-Ek-i4a"/>
                             <constraint firstItem="FlK-xv-cci" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="Frx-qz-lKB"/>
                             <constraint firstItem="LYG-3D-cJV" firstAttribute="top" secondItem="5M8-Sh-pRf" secondAttribute="bottom" constant="8" id="GaF-PX-RbP"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="6b2-jN-eik" secondAttribute="bottom" constant="10" id="SZD-G5-rtm"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="FlK-xv-cci" secondAttribute="bottom" constant="20" id="XVv-6S-n3b"/>
+                            <constraint firstItem="6b2-jN-eik" firstAttribute="top" secondItem="LYG-3D-cJV" secondAttribute="bottom" constant="8" symbolic="YES" id="YR8-py-fFQ"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="LSW-na-Of7" secondAttribute="trailing" constant="44" id="att-TZ-kx7"/>
+                            <constraint firstItem="FlK-xv-cci" firstAttribute="leading" secondItem="6b2-jN-eik" secondAttribute="trailing" constant="10" id="dl2-3H-dn3"/>
                             <constraint firstItem="lyE-7i-9c4" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="44" id="eA7-42-PYI"/>
                             <constraint firstItem="5M8-Sh-pRf" firstAttribute="top" secondItem="lyE-7i-9c4" secondAttribute="bottom" constant="20" id="gzs-I8-cAh"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="LYG-3D-cJV" secondAttribute="trailing" id="l3w-q7-ZAq"/>
@@ -85,11 +97,73 @@
                         <outlet property="restartButton" destination="FlK-xv-cci" id="AAG-Vv-7b0"/>
                         <outlet property="secondPlayerTurnLabel" destination="LSW-na-Of7" id="udX-YE-30Y"/>
                         <outlet property="winnerLabel" destination="5M8-Sh-pRf" id="dWq-Zf-iU7"/>
+                        <segue destination="jei-gy-VG2" kind="show" identifier="ToOpenSettings" id="h0B-fz-uVc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="136.80000000000001" y="133.5832083958021"/>
         </scene>
+        <!--Settings View Controller-->
+        <scene sceneID="NnD-b2-Yl9">
+            <objects>
+                <viewController id="jei-gy-VG2" customClass="SettingsViewController" customModule="XO_game" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Wmc-1e-iNd">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="647"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" alignment="top" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="U3F-B0-LHx">
+                                <rect key="frame" x="10" y="10" width="355" height="70"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Пользователь против:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bNH-E6-Ffy">
+                                        <rect key="frame" x="0.0" y="0.0" width="175.5" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="6Kd-0f-VFc">
+                                        <rect key="frame" x="0.0" y="39" width="329" height="32"/>
+                                        <segments>
+                                            <segment title="Пользователя"/>
+                                            <segment title="Компьютера"/>
+                                            <segment title="Кастом 5x5"/>
+                                        </segments>
+                                    </segmentedControl>
+                                </subviews>
+                            </stackView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bhF-pO-jgK">
+                                <rect key="frame" x="10" y="95" width="355" height="30"/>
+                                <state key="normal" title="Сохранить"/>
+                                <connections>
+                                    <action selector="didTapSaveButton:" destination="jei-gy-VG2" eventType="touchUpInside" id="wDk-hB-Xpx"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="pgR-ic-rPu"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="bhF-pO-jgK" firstAttribute="top" secondItem="U3F-B0-LHx" secondAttribute="bottom" constant="15" id="AAS-TF-4Bj"/>
+                            <constraint firstItem="pgR-ic-rPu" firstAttribute="trailing" secondItem="bhF-pO-jgK" secondAttribute="trailing" constant="10" id="Hyw-Yb-YdU"/>
+                            <constraint firstItem="bhF-pO-jgK" firstAttribute="leading" secondItem="pgR-ic-rPu" secondAttribute="leading" constant="10" id="MSd-Md-e6P"/>
+                            <constraint firstItem="pgR-ic-rPu" firstAttribute="trailing" secondItem="U3F-B0-LHx" secondAttribute="trailing" constant="10" id="QUC-pg-zFZ"/>
+                            <constraint firstItem="U3F-B0-LHx" firstAttribute="top" secondItem="pgR-ic-rPu" secondAttribute="top" constant="10" id="Qdh-bY-Kem"/>
+                            <constraint firstItem="U3F-B0-LHx" firstAttribute="leading" secondItem="pgR-ic-rPu" secondAttribute="leading" constant="10" id="YyK-Ey-Nfs"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="E3d-Sa-8dF"/>
+                    <connections>
+                        <outlet property="versusSegmentControl" destination="6Kd-0f-VFc" id="YrR-pu-bMQ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Uql-7M-OyY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="137" y="833"/>
+        </scene>
     </scenes>
+    <resources>
+        <image name="gearshape" catalog="system" width="128" height="121"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>
